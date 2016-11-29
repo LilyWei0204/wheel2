@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+        }
+        .wheel{
+            width: 100%;
+            height: 400px;
+            margin: 0 auto;
+            /*border:1px solid black;*/
+            overflow: hidden;
+        }
+        .box{
+            width: 400%;
+            height:100%;
+        }
+        .box a{
+            width: 25%;
+            height: 100%;
+            float: left;
+            font-size: 30px;
+            text-align: center;
+            line-height: 400px;
+            color: #fff;
+        }
+        .box a:nth-child(1){
+            background: indianred;
+        }
+        .box a:nth-child(2){
+            background: deepskyblue;
+        }
+        .box a:nth-child(3){
+            background: greenyellow;
+        }
+        .box a:nth-child(4){
+            background: plum;
+        }
+    </style>
+    <script src="js/touch.js"></script>
+    <script src="js/zepto.min.js"></script>
+    <script>
+        $(function(){
+            var widths=$(window).width();
+            var marginL;
+            var num=0;
+            var len=$(".box a").length;
+            $(".wheel").mousedown(function(e){
+                e.preventDefault();
+            })
+            $(".wheel").mousemove(function(e){
+                e.preventDefault();
+            })
+
+            touch.on("body","dragstart",".box",function(e){
+                marginL=parseInt($(".box").css("marginLeft"))?parseInt($(".box").css("marginLeft")):0;
+                $(".box").css({
+                    transition:"none"
+                })
+            })
+
+            touch.on("body","drag",".box",function(e){
+                $(".box").css({
+                        marginLeft:marginL+ e.x
+                })
+            })
+
+            touch.on("body","dragend",".box",function(e){
+                if(Math.abs(e.x)>200){
+                    if(e.direction=="left"){
+                        num++;
+                        if(num>=len){
+                            num=len-1;
+                        }
+                    }else if(e.direction=="right"){
+                        num--;
+                        if(num==-1){
+                            num=0;
+                        }
+                    }
+                    $(".box").css({
+                        marginLeft:-num*widths,
+                        transition:"margin 1s ease"
+                    })
+                }else{
+                    $(".box").css({
+                        marginLeft:-num*widths,
+                        transition:"margin 1s ease"
+                    })
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="wheel">
+    <div class="box">
+        <a href="">图1</a>
+        <a href="">图2</a>
+        <a href="">图3</a>
+        <a href="">图4</a>
+    </div>
+</div>
+</body>
+</html>
